@@ -26,6 +26,7 @@ const simulation = d3
     "link",
     d3
       .forceLink()
+      .distance(100)
       .strength(1)
       .id(function (d: any) {
         return d.id; // todo replace any
@@ -33,6 +34,8 @@ const simulation = d3
   )
   .alphaTarget(0)
   .alphaDecay(0.05);
+
+const link = d3.link(d3.curveBumpX);
 
 onMounted(() => {
   const graphCanvas = d3.select("canvas").node() as HTMLCanvasElement;
@@ -99,22 +102,36 @@ onMounted(() => {
         source: { x: number; y: number };
         target: { x: number; y: number };
       }) {
-        const midpointX = (d.source.x + d.target.x) / 2;
-        const midpointY = (d.source.y + d.target.y) / 2;
+        const midpointX = (d.target.x + d.source.x) / 2;
+        const midpointY = (d.target.y + d.source.y) / 2;
+        const distance = Math.sqrt(Math.pow(d.target.x - d.source.x, 2) + Math.pow(d.target.y - d.source.y, 2))
         context.beginPath();
         context.moveTo(d.source.x, d.source.y);
+        // context.arc(midpointX, midpointY, 1, 0, 2*Math.PI)
         // context.lineTo(midpointX, midpointY);
-        context.lineTo(d.target.x, d.target.y);
+        // context.lineTo(d.target.x, d.target.y);
         // context.quadraticCurveTo(midpointX, midpointY, d.target.x, d.target.y);
+        // context.bezierCurveTo(d.source.x, d.source.y, midpointX, midpointY, d.target.x, d.target.y)
+
         context.stroke();
+        context.strokeText(`x: ${Math.round(midpointX)}; y: ${Math.round(midpointY)}; dist: ${Math.round(distance)}`, midpointX, midpointY);
+
+        const lc = link({
+          source: [d.source.x, d.source.y],
+          target: [d.target.x, d.target.y]
+        });
+        if (lc) {
+          context.fill(new Path2D(lc.toString()));
+        }
       });
 
       // Draw the nodes
-      tempData.nodes.forEach(function (d: { x: number; y: number; col: any }) {
+      tempData.nodes.forEach(function (d: any) {
         context.beginPath();
         context.arc(d.x, d.y, radius, 0, 2 * Math.PI, true);
         context.fillStyle = d.col ? highlightCol : defaultNodeCol;
         context.fill();
+        context.strokeText(`x: ${Math.round(d.x)}; y: ${Math.round(d.y)}`, d.x - radius, d.y + radius * 3, 100);
       });
 
       context.restore();
