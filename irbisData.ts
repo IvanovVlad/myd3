@@ -390,19 +390,31 @@ export const datasetCommon = {
 };
 
 export const datasetDemo = {
-  nodes: [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }],
+  nodes: [{ id: "1" }, { id: "2" }],
   edges: [
     {
+      roles: [
+        {
+          name: 'УЧРЕДИТЕЛЬ',
+          archived: false,
+          last_seen: '2022-11-05T00:00:00',
+          first_seen: '2014-05-08T00:00:00'
+        },
+        {
+          name: 'УПРАВЛЯЮЩИЙ - ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ',
+          archived: true,
+          last_seen: '2020-06-08T00:00:00',
+          first_seen: '2019-03-05T00:00:00'
+        },
+        {
+          name: 'ГЕНЕРАЛЬНЫЙ ДИРЕКТОР',
+          archived: true,
+          last_seen: '2018-04-06T00:00:00',
+          first_seen: '2014-05-08T00:00:00'
+        }
+      ],
       source: "1",
       target: "2",
-    },
-    {
-      source: "1",
-      target: "3",
-    },
-    {
-      source: "1",
-      target: "4",
     },
   ],
 };

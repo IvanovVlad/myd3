@@ -19,8 +19,8 @@ const radius = 5,
 const simulation = d3
   .forceSimulation()
   .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
-  // .force("x", d3.forceX(graphWidth / 2).strength(0.1))
-  // .force("y", d3.forceY(graphHeight / 2).strength(0.1))
+  .force("x", d3.forceX(graphWidth / 2).strength(0.1))
+  .force("y", d3.forceY(graphHeight / 2).strength(0.1))
   .force("charge", d3.forceManyBody().strength(-100))
   .force(
     "link",
@@ -34,8 +34,6 @@ const simulation = d3
   )
   .alphaTarget(0)
   .alphaDecay(0.05);
-
-const link = d3.link(d3.curveBumpX);
 
 onMounted(() => {
   const graphCanvas = d3.select("canvas").node() as HTMLCanvasElement;
@@ -99,29 +97,54 @@ onMounted(() => {
       context.scale(transform.k, transform.k);
 
       tempData.edges.forEach(function (d: {
+        roles: [any];
         source: { x: number; y: number };
         target: { x: number; y: number };
       }) {
         const midpointX = (d.target.x + d.source.x) / 2;
         const midpointY = (d.target.y + d.source.y) / 2;
-        const distance = Math.sqrt(Math.pow(d.target.x - d.source.x, 2) + Math.pow(d.target.y - d.source.y, 2))
+        const distance = Math.sqrt(
+          Math.pow(d.target.x - d.source.x, 2) +
+            Math.pow(d.target.y - d.source.y, 2)
+        );
         context.beginPath();
         context.moveTo(d.source.x, d.source.y);
-        // context.arc(midpointX, midpointY, 1, 0, 2*Math.PI)
-        // context.lineTo(midpointX, midpointY);
-        // context.lineTo(d.target.x, d.target.y);
-        // context.quadraticCurveTo(midpointX, midpointY, d.target.x, d.target.y);
-        // context.bezierCurveTo(d.source.x, d.source.y, midpointX, midpointY, d.target.x, d.target.y)
 
-        context.stroke();
-        context.strokeText(`x: ${Math.round(midpointX)}; y: ${Math.round(midpointY)}; dist: ${Math.round(distance)}`, midpointX, midpointY);
+        context.strokeText(
+          `x: ${Math.round(midpointX)}; y: ${Math.round(
+            midpointY
+          )}; dist: ${Math.round(distance)}`,
+          midpointX,
+          midpointY
+        );
 
-        const lc = link({
-          source: [d.source.x, d.source.y],
-          target: [d.target.x, d.target.y]
-        });
-        if (lc) {
-          context.fill(new Path2D(lc.toString()));
+        let dx = d.target.x - d.source.x,
+          dy = d.target.y - d.source.y;
+        for (let i = 0; i < d.roles.length; i++) {
+          // Calculate the slope of the line
+          let alpha = Math.atan(dy / dx),
+            // Deltas for x and y Axes (for the control points)
+            deltaX = 5,
+            deltaY = 40 * (i - 1),
+            // Find new coordinates after rotation
+            x1 = deltaX * Math.cos(alpha) - -deltaY * Math.sin(alpha),
+            y1 = deltaX * Math.sin(alpha) + -deltaY * Math.cos(alpha),
+            x2 = -deltaX * Math.cos(alpha) - -deltaY * Math.sin(alpha),
+            y2 = -deltaX * Math.sin(alpha) + -deltaY * Math.cos(alpha);
+
+          const midpX = (x1 + d.source.x + x2 + d.target.x) / 2;
+          const midpY = (y1 + d.source.y + y2 + d.target.y) / 2;
+
+          context.beginPath();
+          context.bezierCurveTo(
+            d.source.x,
+            d.source.y,
+            midpX,
+            midpY,
+            d.target.x,
+            d.target.y
+          );
+          context.stroke();
         }
       });
 
@@ -131,7 +154,12 @@ onMounted(() => {
         context.arc(d.x, d.y, radius, 0, 2 * Math.PI, true);
         context.fillStyle = d.col ? highlightCol : defaultNodeCol;
         context.fill();
-        context.strokeText(`x: ${Math.round(d.x)}; y: ${Math.round(d.y)}`, d.x - radius, d.y + radius * 3, 100);
+        context.strokeText(
+          `x: ${Math.round(d.x)}; y: ${Math.round(d.y)}`,
+          d.x - radius,
+          d.y + radius * 3,
+          100
+        );
       });
 
       context.restore();
