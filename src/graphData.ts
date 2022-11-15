@@ -1,4 +1,4 @@
-import { SimulationNodeDatum } from "d3";
+import {SimulationLinkDatum, SimulationNodeDatum} from "d3";
 
 export interface Address {
   zip_code?: string;
@@ -65,7 +65,7 @@ export interface GraphNodeWrapper extends SimulationNodeDatum {
   payload: GraphNode;
 }
 
-export interface GraphLink {
+export interface GraphLink extends SimulationLinkDatum<any> {
   source: string;
   target: string;
   roles: Array<{
@@ -80,6 +80,557 @@ export interface GraphState {
   nodes: GraphNodeWrapper[];
   links: GraphLink[];
 }
+
+export const graphIrbis: GraphState = {
+  nodes: [
+    {
+      payload: {
+        id: "cf65893d-51e1-5e64-848b-49c1ec26e251",
+        inn: "1832051249",
+        born: "2006-11-13",
+        name: 'ООО "ИРБИС АНАЛИТИКА"',
+        ogrn: "1061832016630",
+        type: "organisation",
+        death: null,
+        okved: {
+          code: "62.0",
+          name: "Разработка компьютерного программного обеспечения, консультационные услуги в данной области и другие сопутствующие услуги",
+        },
+        status: null,
+        address: {
+          flat: "КВ.3",
+          house: "Д.267",
+          building: "К.2",
+          zip_code: "426011",
+          city_name: "ИЖЕВСК",
+          city_type: "Г.",
+          region_code: "18",
+          region_name: "УДМУРТСКАЯ",
+          region_type: "РЕСПУБЛИКА",
+          street_name: "УДМУРТСКАЯ",
+          street_type: "УЛ.",
+        },
+      },
+      index: 0,
+      x: 74.87529798377497,
+      y: 535.0792416327417,
+      vy: -3.213485944810882,
+      vx: -8.794829617780254,
+    },
+    {
+      payload: {
+        id: "6a2de00a-f1d3-5ac2-95d3-029adae6faae",
+        inn: "183208397731",
+        name: "ГОРДИЙЧУК ПАВЕЛ ВЛАДИМИРОВИЧ",
+        type: "person",
+        name_obj: {
+          lastname: "ГОРДИЙЧУК",
+          firstname: "ПАВЕЛ",
+          secondname: "ВЛАДИМИРОВИЧ",
+        },
+      },
+      index: 1,
+      x: -464.1032226589863,
+      y: 687.9087726876376,
+      vy: -4.719762850529999,
+      vx: -8.671838309158296,
+    },
+    {
+      payload: {
+        id: "9a435235-91bb-5789-b232-973b5d2bddef",
+        inn: "183100072791",
+        name: "ПОТМАНЦЕВ ИГОРЬ ЛЕОНИДОВИЧ",
+        type: "person",
+        name_obj: {
+          lastname: "ПОТМАНЦЕВ",
+          firstname: "ИГОРЬ",
+          secondname: "ЛЕОНИДОВИЧ",
+        },
+      },
+      index: 2,
+      x: -18.599109386754918,
+      y: 1292.1078298754956,
+      vy: -3.432359594752839,
+      vx: -8.765620767530068,
+    },
+    {
+      payload: {
+        id: "a1c9fb5a-ed34-528a-a257-88e3a3c26e20",
+        inn: "183307512079",
+        name: "РАЗБАКОВ АНДРЕЙ ГЕННАДЬЕВИЧ",
+        type: "person",
+        name_obj: {
+          lastname: "РАЗБАКОВ",
+          firstname: "АНДРЕЙ",
+          secondname: "ГЕННАДЬЕВИЧ",
+        },
+      },
+      index: 3,
+      x: 462.901238841286,
+      y: 976.9994554952617,
+      vy: -3.8062059522390843,
+      vx: -9.893919471363398,
+    },
+    {
+      payload: {
+        id: "a546bbe9-3a17-543d-9444-be174135a1f2",
+        inn: "183210308979",
+        name: "ЕФРЕМОВ МАКСИМ АЛЕКСАНДРОВИЧ",
+        type: "person",
+        name_obj: {
+          lastname: "ЕФРЕМОВ",
+          firstname: "МАКСИМ",
+          secondname: "АЛЕКСАНДРОВИЧ",
+        },
+      },
+      index: 4,
+      x: 666.2523820906611,
+      y: 634.7407940360777,
+      vy: -3.3011072643235044,
+      vx: -9.994289106857694,
+    },
+    {
+      payload: {
+        id: "b1d2a8a2-c8bd-5081-ac97-64e81e5fa3c3",
+        inn: "183210308802",
+        name: "ГОРДИЙЧУК ТАРАС ВЛАДИМИРОВИЧ",
+        type: "person",
+        name_obj: {
+          lastname: "ГОРДИЙЧУК",
+          firstname: "ТАРАС",
+          secondname: "ВЛАДИМИРОВИЧ",
+        },
+      },
+      index: 5,
+      x: 562.0008292368444,
+      y: 233.0634967484943,
+      vy: -2.868275070111535,
+      vx: -9.719990296668692,
+    },
+    {
+      payload: {
+        id: "cfa88ad0-2cb1-553c-bc53-3a91e9d23e75",
+        inn: "183211454002",
+        name: "ГАБИДУЛЛИН МАРАТ САЛИМУЛЛОВИЧ",
+        type: "person",
+        name_obj: {
+          lastname: "ГАБИДУЛЛИН",
+          firstname: "МАРАТ",
+          secondname: "САЛИМУЛЛОВИЧ",
+        },
+      },
+      index: 6,
+      x: -2.3871406744787333,
+      y: -198.42558661229663,
+      vy: -4.091908445194569,
+      vx: -4.4486914473119805,
+    },
+    {
+      payload: {
+        id: "3f6d4a15-9e01-5470-96e6-28480c1517ca",
+        inn: "1831177672",
+        born: "2016-01-15",
+        name: 'ООО "ГРАНИТ ПЛЮС"',
+        ogrn: "1161832051402",
+        type: "organisation",
+        death: null,
+        okved: {
+          code: "82.91",
+          name: "Деятельность агентств по сбору платежей и бюро кредитной информации",
+        },
+        status: null,
+        address: {
+          flat: "ОФИС 1",
+          house: "Д. 39",
+          zip_code: "427627",
+          city_name: "ГЛАЗОВ",
+          city_type: "Г.",
+          region_code: "18",
+          region_name: "УДМУРТСКАЯ",
+          region_type: "РЕСПУБЛИКА",
+          street_name: "ЮКАМЕНСКАЯ",
+          street_type: "УЛ.",
+        },
+      },
+      index: 7,
+      x: -64.74404310645647,
+      y: -925.2465910370541,
+      vy: -5.336135657862687,
+      vx: 0.9005860924637671,
+    },
+    {
+      payload: {
+        id: "86a42213-4ec1-5648-ba2a-14a720cfe68e",
+        inn: "182908968523",
+        name: "БЕЛЯЕВ ГРИГОРИЙ АЛЕКСАНДРОВИЧ",
+        type: "person",
+        name_obj: {
+          lastname: "БЕЛЯЕВ",
+          firstname: "ГРИГОРИЙ",
+          secondname: "АЛЕКСАНДРОВИЧ",
+        },
+      },
+      index: 8,
+      x: -102.72332600716034,
+      y: -1641.2995685638384,
+      vy: -6.052236071734161,
+      vx: 6.585948343824355,
+    },
+    {
+      payload: {
+        id: "c7d5ebaa-095e-563e-b06a-7481d6edea1c",
+        inn: "180500719781",
+        name: "БИЯНОВ ВИТАЛИЙ ЮРЬЕВИЧ",
+        type: "person",
+        name_obj: {
+          lastname: "БИЯНОВ",
+          firstname: "ВИТАЛИЙ",
+          secondname: "ЮРЬЕВИЧ",
+        },
+      },
+      index: 9,
+      x: -622.1893466119482,
+      y: -1044.031060634779,
+      vy: -9.523970706523558,
+      vx: 2.641969639460132,
+    },
+    {
+      payload: {
+        id: "11c968a3-7eb6-5317-8b8b-9e5d1da2e2bc",
+        inn: "1831192906",
+        born: "2019-01-16",
+        name: 'ООО "ДЭЛЕТ"',
+        ogrn: "1191832000480",
+        type: "organisation",
+        death: null,
+        okved: {
+          code: "64.19",
+          name: "Денежное посредничество прочее",
+        },
+        status: null,
+        address: {
+          flat: "ОФИС 2",
+          house: "Д. 107А",
+          zip_code: "427145",
+          place_name: "ИГРА",
+          place_type: "П",
+          region_code: "18",
+          region_name: "УДМУРТСКАЯ",
+          region_type: "РЕСПУБЛИКА",
+          street_name: "СОВЕТСКАЯ",
+          street_type: "УЛ.",
+        },
+      },
+      index: 10,
+      x: 37.78161796998491,
+      y: -2183.488885209168,
+      vy: -4.825176781567073,
+      vx: 10.404751211241386,
+    },
+    {
+      payload: {
+        id: "88c51c35-9efb-58b8-aafd-cbf0eaf99785",
+        inn: "1837002781",
+        born: "2007-05-28",
+        name: 'ООО "АТОН"',
+        ogrn: "1071837000476",
+        type: "organisation",
+        death: {
+          date: "2009-04-15",
+          cause: "Ликвидация юридического лица",
+        },
+        okved: {
+          code: "51.53",
+          name: "Оптовая торговля лесоматериалами, строительными материалами и санитарно-техническим оборудованием",
+        },
+        status: null,
+        address: {
+          house: "Д.39",
+          zip_code: "427627",
+          city_name: "ГЛАЗОВ",
+          city_type: "Г.",
+          region_code: "18",
+          region_name: "УДМУРТСКАЯ",
+          region_type: "РЕСПУБЛИКА",
+          street_name: "ЮКАМЕНСКАЯ",
+          street_type: "УЛ.",
+        },
+      },
+      index: 11,
+      x: -512.2890159882653,
+      y: -2042.2877081776105,
+      vy: -8.794671897966925,
+      vx: 10.062985365922033,
+    },
+    {
+      payload: {
+        id: "5dc6f4eb-83fa-51fc-b696-9d371f8d82be",
+        inn: "1832148642",
+        born: "2018-03-26",
+        name: 'ООО "ЮРКОНСАЛТ"',
+        ogrn: "1181832007356",
+        type: "organisation",
+        death: {
+          date: "2021-11-22",
+          cause: "Ликвидация юридического лица",
+        },
+        okved: {
+          code: "69.10",
+          name: "Деятельность в области права",
+        },
+        status: null,
+        address: {
+          flat: "КВ. 70",
+          house: "Д. 61",
+          zip_code: "426006",
+          city_name: "ИЖЕВСК",
+          city_type: "Г.",
+          region_code: "18",
+          region_name: "УДМУРТСКАЯ",
+          region_type: "РЕСПУБЛИКА",
+          street_name: "БАРАНОВА",
+          street_type: "УЛ.",
+        },
+      },
+      index: 12,
+      x: 226.14131668846346,
+      y: 1815.1950372389554,
+      vy: -4.142401434172495,
+      vx: -7.92856100148658,
+    },
+    {
+      payload: {
+        id: "feff0e9d-55bd-5e2a-bacf-5c4cc59c98a1",
+        inn: "1831168212",
+        born: "2014-08-27",
+        name: 'ООО МКК "МАЯК ФИНАНС"',
+        ogrn: "1141831003984",
+        type: "organisation",
+        death: {
+          date: "2020-09-17",
+          cause:
+            "Исключение из ЕГРЮЛ юридического лица в связи наличием в ЕГРЮЛ сведений о нем, в отношении которых внесена запись о недостоверности",
+        },
+        okved: {
+          code: "64.19",
+          name: "Денежное посредничество прочее",
+        },
+        status: null,
+        address: {
+          flat: "КВ. 91",
+          house: "Д. 20",
+          zip_code: "426009",
+          city_name: "ИЖЕВСК",
+          city_type: "Г.",
+          region_code: "18",
+          region_name: "УДМУРТСКАЯ",
+          region_type: "РЕСПУБЛИКА",
+          street_name: "ПАРКОВАЯ",
+          street_type: "УЛ.",
+        },
+      },
+      index: 13,
+      x: -287.9543512455197,
+      y: 1792.5680998323658,
+      vy: -3.008975015927617,
+      vx: -7.4153735033100086,
+    },
+  ],
+  links: [
+    {
+      roles: [
+        {
+          name: "УЧРЕДИТЕЛЬ",
+          archived: false,
+          last_seen: "2022-11-05T00:00:00",
+          first_seen: "2018-04-06T00:00:00",
+        },
+      ],
+      source: "6a2de00a-f1d3-5ac2-95d3-029adae6faae",
+      target: "cf65893d-51e1-5e64-848b-49c1ec26e251",
+    },
+    {
+      roles: [
+        {
+          name: "ГЕНЕРАЛЬНЫЙ ДИРЕКТОР",
+          archived: false,
+          last_seen: "2022-11-05T00:00:00",
+          first_seen: "2020-06-08T00:00:00",
+        },
+      ],
+      source: "9a435235-91bb-5789-b232-973b5d2bddef",
+      target: "cf65893d-51e1-5e64-848b-49c1ec26e251",
+    },
+    {
+      roles: [
+        {
+          name: "УЧРЕДИТЕЛЬ",
+          archived: false,
+          last_seen: "2022-11-05T00:00:00",
+          first_seen: "2018-04-06T00:00:00",
+        },
+      ],
+      source: "a1c9fb5a-ed34-528a-a257-88e3a3c26e20",
+      target: "cf65893d-51e1-5e64-848b-49c1ec26e251",
+    },
+    {
+      roles: [
+        {
+          name: "УЧРЕДИТЕЛЬ",
+          archived: false,
+          last_seen: "2022-11-05T00:00:00",
+          first_seen: "2018-04-06T00:00:00",
+        },
+      ],
+      source: "a546bbe9-3a17-543d-9444-be174135a1f2",
+      target: "cf65893d-51e1-5e64-848b-49c1ec26e251",
+    },
+    {
+      roles: [
+        {
+          name: "УЧРЕДИТЕЛЬ",
+          archived: false,
+          last_seen: "2022-11-05T00:00:00",
+          first_seen: "2018-04-06T00:00:00",
+        },
+      ],
+      source: "b1d2a8a2-c8bd-5081-ac97-64e81e5fa3c3",
+      target: "cf65893d-51e1-5e64-848b-49c1ec26e251",
+    },
+    {
+      roles: [
+        {
+          name: "УЧРЕДИТЕЛЬ",
+          archived: false,
+          last_seen: "2022-11-05T00:00:00",
+          first_seen: "2014-05-08T00:00:00",
+        },
+        {
+          name: "УПРАВЛЯЮЩИЙ - ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ",
+          archived: true,
+          last_seen: "2020-06-08T00:00:00",
+          first_seen: "2019-03-05T00:00:00",
+        },
+        {
+          name: "ГЕНЕРАЛЬНЫЙ ДИРЕКТОР",
+          archived: true,
+          last_seen: "2018-04-06T00:00:00",
+          first_seen: "2014-05-08T00:00:00",
+        },
+      ],
+      source: "cfa88ad0-2cb1-553c-bc53-3a91e9d23e75",
+      target: "cf65893d-51e1-5e64-848b-49c1ec26e251",
+    },
+    {
+      roles: [
+        {
+          name: "ГЕНЕРАЛЬНЫЙ ДИРЕКТОР",
+          archived: true,
+          last_seen: "2019-10-08T00:00:00",
+          first_seen: "2016-01-26T00:00:00",
+        },
+        {
+          name: "УЧРЕДИТЕЛЬ",
+          archived: true,
+          last_seen: "2019-10-08T00:00:00",
+          first_seen: "2016-01-26T00:00:00",
+        },
+      ],
+      source: "cfa88ad0-2cb1-553c-bc53-3a91e9d23e75",
+      target: "3f6d4a15-9e01-5470-96e6-28480c1517ca",
+    },
+    {
+      roles: [
+        {
+          name: "УЧРЕДИТЕЛЬ",
+          archived: false,
+          last_seen: "2022-09-16T00:00:00",
+          first_seen: "2019-10-17T00:00:00",
+        },
+        {
+          name: "ГЕНЕРАЛЬНЫЙ ДИРЕКТОР",
+          archived: false,
+          last_seen: "2022-09-16T00:00:00",
+          first_seen: "2019-10-17T00:00:00",
+        },
+      ],
+      source: "86a42213-4ec1-5648-ba2a-14a720cfe68e",
+      target: "3f6d4a15-9e01-5470-96e6-28480c1517ca",
+    },
+    {
+      roles: [
+        {
+          name: "УЧРЕДИТЕЛЬ",
+          archived: false,
+          last_seen: "2022-09-16T00:00:00",
+          first_seen: "2020-12-21T00:00:00",
+        },
+      ],
+      source: "c7d5ebaa-095e-563e-b06a-7481d6edea1c",
+      target: "3f6d4a15-9e01-5470-96e6-28480c1517ca",
+    },
+    {
+      roles: [
+        {
+          name: "УЧРЕДИТЕЛЬ",
+          archived: false,
+          last_seen: "2022-09-16T00:00:00",
+          first_seen: "2019-01-17T00:00:00",
+        },
+        {
+          name: "ДИРЕКТОР",
+          archived: false,
+          last_seen: "2022-09-16T00:00:00",
+          first_seen: "2019-01-17T00:00:00",
+        },
+      ],
+      source: "86a42213-4ec1-5648-ba2a-14a720cfe68e",
+      target: "11c968a3-7eb6-5317-8b8b-9e5d1da2e2bc",
+    },
+    {
+      roles: [
+        {
+          name: "УЧРЕДИТЕЛЬ",
+          archived: false,
+          last_seen: "2022-01-02T00:00:00",
+          first_seen: "2014-05-09T00:00:00",
+        },
+      ],
+      source: "86a42213-4ec1-5648-ba2a-14a720cfe68e",
+      target: "88c51c35-9efb-58b8-aafd-cbf0eaf99785",
+    },
+    {
+      roles: [
+        {
+          name: "УЧРЕДИТЕЛЬ",
+          archived: true,
+          last_seen: "2018-04-02T00:00:00",
+          first_seen: "2018-03-27T00:00:00",
+        },
+      ],
+      source: "9a435235-91bb-5789-b232-973b5d2bddef",
+      target: "5dc6f4eb-83fa-51fc-b696-9d371f8d82be",
+    },
+    {
+      roles: [
+        {
+          name: "ДИРЕКТОР",
+          archived: true,
+          last_seen: "2015-11-17T00:00:00",
+          first_seen: "2015-06-22T00:00:00",
+        },
+        {
+          name: "УЧРЕДИТЕЛЬ",
+          archived: true,
+          last_seen: "2016-07-21T00:00:00",
+          first_seen: "2015-06-22T00:00:00",
+        },
+      ],
+      source: "9a435235-91bb-5789-b232-973b5d2bddef",
+      target: "feff0e9d-55bd-5e2a-bacf-5c4cc59c98a1",
+    },
+  ],
+};
 
 export const graphData: GraphState = {
   nodes: [
