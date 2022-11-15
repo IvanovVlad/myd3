@@ -1,0 +1,38 @@
+<svg width="72" height="72" viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>Component 2</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(678 392)">
+<g id="Component 2">
+<g id="Ellipse" filter="url(#filter0_d)">
+<g id="Ellipse">
+<use xlink:href="#path0_fill" transform="matrix(-1 2.77556e-16 -2.77556e-16 -1 -614 -330)" fill="#404040"/>
+<mask id="mask0_outline_ins">
+<use xlink:href="#path0_fill" fill="white" transform="matrix(-1 2.77556e-16 -2.77556e-16 -1 -614 -330)"/>
+</mask>
+<g mask="url(#mask0_outline_ins)">
+<use xlink:href="#path1_stroke_2x" transform="matrix(-1 2.77556e-16 -2.77556e-16 -1 -614 -330)" fill="#404040"/>
+</g>
+</g>
+</g>
+<g id="Union">
+<g id="Union">
+<use xlink:href="#path2_fill" transform="translate(-654 -373)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter0_d" filterUnits="userSpaceOnUse" x="-678" y="-392" width="72" height="72" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 255 0"/>
+<feOffset dx="2" dy="4"/>
+<feGaussianBlur stdDeviation="3"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+</filter>
+<path id="path0_fill" d="M 60 30C 60 46.5685 46.5685 60 30 60C 13.4315 60 0 46.5685 0 30C 0 13.4315 13.4315 0 30 0C 46.5685 0 60 13.4315 60 30Z"/>
+<path id="path1_stroke_2x" d="M 58 30C 58 45.464 45.464 58 30 58L 30 62C 47.6731 62 62 47.6731 62 30L 58 30ZM 30 58C 14.536 58 2 45.464 2 30L -2 30C -2 47.6731 12.3269 62 30 62L 30 58ZM 2 30C 2 14.536 14.536 2 30 2L 30 -2C 12.3269 -2 -2 12.3269 -2 30L 2 30ZM 30 2C 45.464 2 58 14.536 58 30L 62 30C 62 12.3269 47.6731 -2 30 -2L 30 2Z"/>
+<path id="path2_fill" fill-rule="evenodd" d="M 10.0382 12.4975C 13.492 12.4732 16.2722 9.65592 16.2479 6.20487C 16.2235 2.75382 13.404 -0.0241339 9.95023 0.00015811C 6.49643 0.0244806 3.71628 2.8418 3.74057 6.29285C 3.76492 9.7439 6.58444 12.5218 10.0382 12.4975ZM 4.17258 12.5414C 2.06583 9.43177 -0.00979468 15.6954 0.0198074 19.8611C 0.0224319 20.2342 0.015657 20.5823 0.00930933 20.9068C -0.0551438 24.2058 -0.0719895 25.0692 10.3662 24.9958C 20.2303 24.9264 20.1689 24.1559 19.9407 21.289C 19.9037 20.8237 19.8622 20.3032 19.8581 19.7216C 19.8285 15.5558 17.6999 9.32178 15.6376 12.4608C 13.5752 15.5997 6.27933 15.651 4.17258 12.5414Z"/>
+</defs>
+</svg>

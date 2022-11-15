@@ -11,10 +11,12 @@
 <script lang="ts" setup>
 import * as d3 from "d3";
 import { D3DragEvent, D3ZoomEvent, SimulationLinkDatum } from "d3";
-import { onMounted, Ref, ref } from "vue";
+import { onBeforeMount, onMounted, Ref, ref } from "vue";
 import { graphIrbis, GraphNodeWrapper, GraphState } from "../graphData";
+import { GraphIcons, loadImages } from "./draw";
 
 // todo fix typescript errors
+let icons: Record<GraphIcons, HTMLImageElement> | Object = {};
 
 const radius = 15,
   graphHeight = 500,
@@ -199,10 +201,13 @@ function simulationUpdate(tempData: GraphState) {
 
   // Draw the nodes
   for (const d of tempData.nodes) {
-    context.beginPath();
-    context.arc(d.x, d.y, radius, 0, 2 * Math.PI, true);
-    context.fill();
-
+    // context.beginPath();
+    // context.arc(d.x, d.y, radius, 0, 2 * Math.PI, true);
+    // context.fill();
+    const size = radius * 2;
+    if (icons["employee"]) {
+      context.drawImage(icons["employee"], d.x - size / 2, d.y - size / 2, size, size);
+    }
     context.textAlign = "center";
     context.font = "10px Arial";
     const fs = context.fillStyle;
@@ -212,7 +217,7 @@ function simulationUpdate(tempData: GraphState) {
       context.fillText(wt[i], d.x, d.y + radius * 2 + i * 12);
     }
     context.fillStyle = fs;
-    // context.strokeText(`x: ${Math.round(d.x)}; y: ${Math.round(d.y)}`, d.x - radius, d.y + radius * 3, 100);
+
   }
 
   context.restore();
@@ -226,6 +231,10 @@ function initGraph(tempData: any) {
   initDrag(dataset);
   initZoom();
 }
+
+onBeforeMount(() => {
+  loadImages(icons);
+});
 
 onMounted(() => {
   if (!canvasElement.value) return;

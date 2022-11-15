@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="72" height="72" viewBox="0 0 36.406 36.406" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <path fill-rule="evenodd" opacity="0.051" fill="rgb(219, 97, 48)" d="M18.203,-0.000 C28.256,-0.000 36.406,8.150 36.406,18.203 C36.406,28.256 28.256,36.406 18.203,36.406 C8.150,36.406 -0.000,28.256 -0.000,18.203 C-0.000,8.150 8.150,-0.000 18.203,-0.000 Z"/>
+    <path fill-rule="evenodd" opacity="0.2" fill="rgb(219, 97, 48)" d="M18.203,3.469 C26.341,3.469 32.937,10.066 32.937,18.203 C32.937,26.341 26.341,32.937 18.203,32.937 C10.066,32.937 3.469,26.341 3.469,18.203 C3.469,10.066 10.066,3.469 18.203,3.469 Z"/>
+  </g>
+  <g style="" transform="matrix(0.389556, 0, 0, 0.409937, 4.997712, 5.077394)">
+    <g id="Canvas" transform="translate(678 -254)">
+      <g id="Component 9">
+        <g id="Ellipse" filter="url(#filter0_d)">
+          <g id="Ellipse">
+            <path d="M 60 30C 60 46.5685 46.5685 60 30 60C 13.4315 60 0 46.5685 0 30C 0 13.4315 13.4315 0 30 0C 46.5685 0 60 13.4315 60 30Z" transform="matrix(-1, 0, 0, -1, -614, 316)" fill="#db6130"/>
+            <mask id="mask0_outline_ins">
+              <path d="M 60 30C 60 46.5685 46.5685 60 30 60C 13.4315 60 0 46.5685 0 30C 0 13.4315 13.4315 0 30 0C 46.5685 0 60 13.4315 60 30Z" transform="matrix(-1, 0, 0, -1, -614, 316)" fill="white"/>
+            </mask>
+            <g mask="url(#mask0_outline_ins)">
+              <path d="M 58 30C 58 45.464 45.464 58 30 58L 30 62C 47.6731 62 62 47.6731 62 30L 58 30ZM 30 58C 14.536 58 2 45.464 2 30L -2 30C -2 47.6731 12.3269 62 30 62L 30 58ZM 2 30C 2 14.536 14.536 2 30 2L 30 -2C 12.3269 -2 -2 12.3269 -2 30L 2 30ZM 30 2C 45.464 2 58 14.536 58 30L 62 30C 62 12.3269 47.6731 -2 30 -2L 30 2Z" transform="matrix(-1, 0, 0, -1, -614, 316)" fill="#db6130"/>
+            </g>
+          </g>
+        </g>
+        <g id="Rectangle">
+          <g id="Rectangle">
+            <path d="M 0 2C 0 0.895431 0.895431 0 2 0L 18 0C 19.1046 0 20 0.895431 20 2L 20 25L 0 25L 0 2Z" transform="matrix(1, 0, 0, 1, -654, 273)" fill="#FFFFFF"/>
+          </g>
+          <g id="Rectangle 2">
+            <path d="M 0 0L 4 0L 4 5L 0 5L 0 0Z" transform="matrix(1, 0, 0, 1, -651, 276)" fill="#db6130"/>
+          </g>
+          <g id="Rectangle 2.1">
+            <path d="M 0 0L 4 0L 4 5L 0 5L 0 0Z" transform="matrix(1, 0, 0, 1, -642, 276)" fill="#db6130"/>
+          </g>
+          <g id="Rectangle 2.2">
+            <path d="M 0 0L 4 0L 4 5L 0 5L 0 0Z" transform="matrix(1, 0, 0, 1, -651, 284)" fill="#db6130"/>
+          </g>
+          <g id="Rectangle 2.3">
+            <path d="M 0 0L 4 0L 4 5L 0 5L 0 0Z" transform="matrix(1, 0, 0, 1, -642, 284)" fill="#db6130"/>
+          </g>
+        </g>
+      </g>
+    </g>
+    <defs>
+      <filter id="filter0_d" filterUnits="userSpaceOnUse" x="-678" y="254" width="72" height="72" color-interpolation-filters="sRGB">
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+      </filter>
+    </defs>
+  </g>
+</svg>
