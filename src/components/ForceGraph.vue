@@ -13,14 +13,30 @@ import * as d3 from "d3";
 import { D3DragEvent, D3ZoomEvent, SimulationLinkDatum } from "d3";
 import { onBeforeMount, onMounted, Ref, ref } from "vue";
 import { graphIrbis, GraphNodeWrapper, GraphState } from "../graphData";
-import { GraphIcons, loadImages } from "./draw";
+import { doubleClick, GraphIcons, loadImages } from "./draw";
 
 // todo fix typescript errors
-let icons: Record<GraphIcons, HTMLImageElement> | Object = {};
+let icons: Record<GraphIcons, HTMLImageElement | undefined> = {
+  employee: undefined,
+  employeeDisabled: undefined,
+  employeeEx: undefined,
+  employeeExDisabled: undefined,
+  founder: undefined,
+  founderDisabled: undefined,
+  founderEx: undefined,
+  founderExDisabled: undefined,
+  mainOrganisation: undefined,
+  organisation: undefined,
+  organisationDead: undefined,
+};
 
 const radius = 15,
   graphHeight = 500,
   graphWidth = 1000;
+
+const doubleClickHandler = doubleClick(() => {
+  console.log("dblclick");
+});
 
 const simulation = d3
   .forceSimulation()
@@ -79,6 +95,7 @@ function initDrag(tempData: any) {
   }
 
   function dragStarted(e: D3DragEvent<any, any, any>) {
+    doubleClickHandler.handleClick(e.subject, new Date());
     if (selectedNode) {
       if (
         selectedNode.payload.id === e.subject.payload.id &&
@@ -206,7 +223,13 @@ function simulationUpdate(tempData: GraphState) {
     // context.fill();
     const size = radius * 2;
     if (icons["employee"]) {
-      context.drawImage(icons["employee"], d.x - size / 2, d.y - size / 2, size, size);
+      context.drawImage(
+        icons["employee"],
+        d.x - size / 2,
+        d.y - size / 2,
+        size,
+        size
+      );
     }
     context.textAlign = "center";
     context.font = "10px Arial";
@@ -217,7 +240,6 @@ function simulationUpdate(tempData: GraphState) {
       context.fillText(wt[i], d.x, d.y + radius * 2 + i * 12);
     }
     context.fillStyle = fs;
-
   }
 
   context.restore();

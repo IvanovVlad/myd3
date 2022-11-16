@@ -1,3 +1,5 @@
+import { GraphNodeWrapper } from "../graphData";
+
 const icons = {
   employee: "./src/chart/icon_employee.svg",
   employeeDisabled: "./src/chart/icon_employee_disabled.svg",
@@ -22,4 +24,30 @@ export function loadImages(result: Record<GraphIcons, HTMLImageElement>) {
       result[key as GraphIcons] = img;
     };
   }
+}
+
+export function doubleClick(handler: (n: GraphNodeWrapper) => void) {
+  let previousNode: GraphNodeWrapper | null = null;
+  let previousTime: Date | null = null;
+
+  const doubleClickHandler: (n: GraphNodeWrapper) => void = handler;
+
+  function handleClick(node: GraphNodeWrapper, time: Date) {
+    if (!previousNode || !previousTime) {
+      previousNode = node;
+      previousTime = time;
+      return;
+    }
+
+    const dt = time.getTime() - previousTime.getTime();
+    const maxDelay = 3000;
+
+    if (previousNode.payload.id === node.payload.id && dt < maxDelay) {
+      doubleClickHandler(node);
+      previousNode = null;
+      previousTime = null;
+    }
+  }
+
+  return { handleClick };
 }
