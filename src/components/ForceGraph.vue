@@ -38,8 +38,18 @@ const radius = 25,
   graphHeight = 500,
   graphWidth = 1000;
 
-const doubleClickHandler = doubleClick(() => {
-  console.log("dblclick");
+const doubleClickHandler = doubleClick(async () => {
+  await fetch(
+    "https://irbis.dev.a-inform.com/ru/base/-/services/report/132999cd-a6fd-4538-a6a3-28f4891f937f/people-orgs.json?event=graph-node&inn=1832051249&ogrn=1061832016630"
+  ).then((e) => {
+    return e.json();
+  }).then((e) => {
+    const d = e.response as GraphState;
+    // simulation.stop();
+    // simulation.nodes(d.nodes).on("tick", () => simulationUpdate(d));
+    // simulation.force<any>("link").links(d.links);
+    // simulation.alphaTarget(0.5).restart();
+  });
 });
 
 const simulation = d3
@@ -66,7 +76,7 @@ let dragging = false;
 let canvasElement: Ref<HTMLCanvasElement | null> = ref(null);
 let context: CanvasRenderingContext2D | null = null;
 let transform = d3.zoomIdentity;
-const dataset: GraphState = graphIrbis;
+let dataset: GraphState = graphIrbis;
 const queryInn = dataset.nodes[0].payload.inn || "";
 
 function initDrag(tempData: any) {
