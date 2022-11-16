@@ -96,20 +96,6 @@ function initDrag(tempData: any) {
 
   function dragStarted(e: D3DragEvent<any, any, any>) {
     doubleClickHandler.handleClick(e.subject, new Date());
-    if (selectedNode) {
-      if (
-        selectedNode.payload.id === e.subject.payload.id &&
-        dataset.nodes[selectedNode.index].fx
-      ) {
-        dataset.nodes[selectedNode.index].fx = null;
-        dataset.nodes[selectedNode.index].fy = null;
-        selectedNode = null;
-        return;
-      }
-
-      dataset.nodes[selectedNode.index].fx = null;
-      dataset.nodes[selectedNode.index].fy = null;
-    }
     selectedNode = e.subject;
     if (!e.active) simulation.alphaTarget(0.5).restart();
     e.subject.fx = transform.invertX(e.x);
@@ -122,10 +108,10 @@ function initDrag(tempData: any) {
   }
 
   function dragEnded(e: D3DragEvent<any, any, any>) {
-    // selectedNode.value = null;
     if (!e.active) simulation.alphaTarget(0);
-    // e.subject.fx = null;
-    // e.subject.fy = null;
+    selectedNode = null;
+    e.subject.fx = null;
+    e.subject.fy = null;
   }
 }
 
