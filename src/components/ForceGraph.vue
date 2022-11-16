@@ -10,12 +10,13 @@
 
 <script lang="ts" setup>
 import * as d3 from "d3";
-import { D3DragEvent, D3ZoomEvent, SimulationLinkDatum } from "d3";
+import { D3DragEvent, D3ZoomEvent } from "d3";
 import { onBeforeMount, onMounted, Ref, ref } from "vue";
-import { graphIrbis, GraphNodeWrapper, GraphState } from "../graphData";
-import { doubleClick, GraphIcons, loadImages } from "./draw";
+import { graphIrbis, GraphState } from "../graphData";
+import { doubleClick } from "./draw";
+import { debounce } from "./tools";
+import { GraphIcons, loadImages } from "./icons";
 
-// todo fix typescript errors
 let icons: Record<GraphIcons, HTMLImageElement | undefined> = {
   employee: undefined,
   employeeDisabled: undefined,
@@ -50,8 +51,8 @@ const simulation = d3
       .forceLink()
       .distance(100)
       .strength(1)
-      .id(function (d: GraphNodeWrapper) {
-        return d.payload.id; // todo replace any
+      .id(function (d: any) {
+        return d.payload.id;
       })
   )
   .alphaTarget(0)
@@ -72,8 +73,26 @@ function initDrag(tempData: any) {
     .on("end", dragEnded);
 
   dragHandler(d3.select(canvasElement.value as Element));
+  d3.select(canvasElement.value as Element).on(
+    "mousemove",
+    debounce(
+      (e: any) => {
+        console.log("mousemove");
+        const node = locateNode(e as DragEvent);
+        if (canvasElement.value?.style) {
+          if (node) {
+            canvasElement.value.style.cursor = "pointer";
+          } else {
+            canvasElement.value.style.cursor = "";
+          }
+        }
+      },
+      10,
+      false
+    )
+  );
 
-  function dragSubject(e: D3DragEvent<any, any, any>) {
+  function dragSubject(e: DragEvent) {
     let i,
       x = transform.invertX(e.x),
       y = transform.invertY(e.y),
@@ -89,6 +108,24 @@ function initDrag(tempData: any) {
         node.x = transform.applyX(node.x);
         node.y = transform.applyY(node.y);
 
+        return node;
+      }
+    }
+  }
+
+  function locateNode(e: DragEvent) {
+    let i,
+      x = transform.invertX(e.x),
+      y = transform.invertY(e.y),
+      dx,
+      dy;
+    for (i = tempData.nodes.length - 1; i >= 0; --i) {
+      const node = tempData.nodes[i];
+      if (!node || !node.x || !node.y) return node;
+      dx = x - node.x;
+      dy = y - node.y;
+
+      if (dx * dx + dy * dy < radius * radius + 10) {
         return node;
       }
     }
@@ -138,9 +175,7 @@ function simulationUpdate(tempData: GraphState) {
   context.translate(transform.x, transform.y);
   context.scale(transform.k, transform.k);
 
-  const links = tempData.links as SimulationLinkDatum<any>[];
-
-  for (const d of links) {
+  for (const d of tempData.links) {
     const dx = d.target.x - d.source.x,
       dy = d.target.y - d.source.y;
     let indexes: number[] = [];
@@ -204,9 +239,7 @@ function simulationUpdate(tempData: GraphState) {
 
   // Draw the nodes
   for (const d of tempData.nodes) {
-    // context.beginPath();
-    // context.arc(d.x, d.y, radius, 0, 2 * Math.PI, true);
-    // context.fill();
+    if (!d.x || !d.y) continue;
     const size = radius * 2;
     if (icons["employee"]) {
       context.drawImage(
@@ -233,9 +266,8 @@ function simulationUpdate(tempData: GraphState) {
 
 function initGraph(tempData: any) {
   simulation.nodes(tempData.nodes).on("tick", () => simulationUpdate(dataset));
-  simulation.force<any>("link").links(tempData.links); // todo remove any
+  simulation.force<any>("link").links(tempData.links);
 
-  // todo: d3-graph redundant
   initDrag(dataset);
   initZoom();
 }

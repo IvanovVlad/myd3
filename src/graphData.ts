@@ -66,8 +66,6 @@ export interface GraphNodeWrapper extends SimulationNodeDatum {
 }
 
 export interface GraphLink extends SimulationLinkDatum<any> {
-  source: string;
-  target: string;
   roles: Array<{
     name: string;
     first_seen: string;
