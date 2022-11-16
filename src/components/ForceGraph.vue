@@ -1,10 +1,13 @@
 <template>
-  <div id="#graph">
-    <canvas
-      :width="graphWidth"
-      :height="graphHeight"
-      ref="canvasElement"
-    ></canvas>
+  <div>
+    <div id="#graph">
+      <canvas
+        :width="graphWidth"
+        :height="graphHeight"
+        ref="canvasElement"
+      ></canvas>
+    </div>
+    <div>selected: {{ selectedNode }}</div>
   </div>
 </template>
 
@@ -14,8 +17,8 @@ import { D3DragEvent, D3ZoomEvent } from "d3";
 import { onBeforeMount, onMounted, Ref, ref } from "vue";
 import { graphIrbis, GraphState } from "../graphData";
 import { doubleClick } from "./draw";
-import { debounce } from "./tools";
-import { GraphIcons, loadImages } from "./icons";
+import { debounce, wrapText } from "./tools";
+import { getIcon, GraphIcons, isFounder, loadImages } from "./icons";
 
 let icons: Record<GraphIcons, HTMLImageElement | undefined> = {
   employee: undefined,
@@ -31,7 +34,7 @@ let icons: Record<GraphIcons, HTMLImageElement | undefined> = {
   organisationDead: undefined,
 };
 
-const radius = 15,
+const radius = 25,
   graphHeight = 500,
   graphWidth = 1000;
 
@@ -58,11 +61,13 @@ const simulation = d3
   .alphaTarget(0)
   .alphaDecay(0.05);
 
-let selectedNode: any = null;
+let selectedNode: any = ref(null);
+let dragging = false;
 let canvasElement: Ref<HTMLCanvasElement | null> = ref(null);
 let context: CanvasRenderingContext2D | null = null;
 let transform = d3.zoomIdentity;
 const dataset: GraphState = graphIrbis;
+const queryInn = dataset.nodes[0].payload.inn || "";
 
 function initDrag(tempData: any) {
   const dragHandler = d3
@@ -77,12 +82,16 @@ function initDrag(tempData: any) {
     "mousemove",
     debounce(
       (e: any) => {
-        console.log("mousemove");
+        if (dragging) {
+          return;
+        }
         const node = locateNode(e as DragEvent);
         if (canvasElement.value?.style) {
           if (node) {
+            selectedNode.value = node;
             canvasElement.value.style.cursor = "pointer";
           } else {
+            selectedNode.value = null;
             canvasElement.value.style.cursor = "";
           }
         }
@@ -133,7 +142,9 @@ function initDrag(tempData: any) {
 
   function dragStarted(e: D3DragEvent<any, any, any>) {
     doubleClickHandler.handleClick(e.subject, new Date());
-    selectedNode = e.subject;
+    dragging = true;
+    selectedNode.value = e.subject;
+
     if (!e.active) simulation.alphaTarget(0.5).restart();
     e.subject.fx = transform.invertX(e.x);
     e.subject.fy = transform.invertY(e.y);
@@ -145,8 +156,10 @@ function initDrag(tempData: any) {
   }
 
   function dragEnded(e: D3DragEvent<any, any, any>) {
+    dragging = false;
+    selectedNode.value = null;
+
     if (!e.active) simulation.alphaTarget(0);
-    selectedNode = null;
     e.subject.fx = null;
     e.subject.fy = null;
   }
@@ -175,6 +188,7 @@ function simulationUpdate(tempData: GraphState) {
   context.translate(transform.x, transform.y);
   context.scale(transform.k, transform.k);
 
+  // Draw links
   for (const d of tempData.links) {
     const dx = d.target.x - d.source.x,
       dy = d.target.y - d.source.y;
@@ -188,12 +202,14 @@ function simulationUpdate(tempData: GraphState) {
         indexes.push(i);
       }
     }
+    let roleIndex = 0;
     for (const i of indexes) {
       // Calculate the slope of the line
       const alpha = Math.atan(dy / dx),
         // Deltas for x and y Axes (for the control points)
         deltaX = 5,
-        deltaY = 10 * (i - 1),
+        // curvature
+        deltaY = 14 * (i - 1),
         // Find new coordinates after rotation
         x1 = deltaX * Math.cos(alpha) - -deltaY * Math.sin(alpha),
         y1 = deltaX * Math.sin(alpha) + -deltaY * Math.cos(alpha),
@@ -201,6 +217,25 @@ function simulationUpdate(tempData: GraphState) {
         y2 = -deltaX * Math.sin(alpha) + -deltaY * Math.cos(alpha),
         midpX = (x1 + d.source.x + x2 + d.target.x) / 2,
         midpY = (y1 + d.source.y + y2 + d.target.y) / 2;
+
+      const role = d.roles[roleIndex];
+      if (isFounder(role?.name)) {
+        context.strokeStyle = "red";
+      } else {
+        context.strokeStyle = "black";
+      }
+
+      if (role?.archived) {
+        if (typeof context.setLineDash === "undefined") {
+          //@ts-ignore
+          context.mozDash = [4];
+        } else {
+          //Chrome
+          context.setLineDash([4]);
+        }
+      } else {
+        context.lineDashOffset = 100;
+      }
 
       context.beginPath();
       context.bezierCurveTo(
@@ -212,51 +247,32 @@ function simulationUpdate(tempData: GraphState) {
         d.target.y
       );
       context.stroke();
-    }
-  }
 
-  function wrapText(
-    context: CanvasRenderingContext2D,
-    text: string,
-    maxWidth: number
-  ) {
-    const words = text.split(" ");
-    let result = [];
-    let line = "";
-
-    for (let n = 0; n < words.length; n++) {
-      const testLine = line + words[n] + " ";
-      const testWidth = context.measureText(testLine).width;
-      if (testWidth > maxWidth && n > 0) {
-        result.push(testLine);
-        line = "";
-      } else {
-        line = testLine;
-      }
+      roleIndex++;
     }
-    return result;
   }
 
   // Draw the nodes
   for (const d of tempData.nodes) {
     if (!d.x || !d.y) continue;
     const size = radius * 2;
-    if (icons["employee"]) {
-      context.drawImage(
-        icons["employee"],
-        d.x - size / 2,
-        d.y - size / 2,
-        size,
-        size
-      );
+    const icon = icons[getIcon(d.payload, queryInn)];
+    if (icon) {
+      context.drawImage(icon, d.x - size / 2, d.y - size / 2, size, size);
     }
+  }
+
+  // Draw the labels
+  for (const d of tempData.nodes) {
+    if (!d.x || !d.y) continue;
     context.textAlign = "center";
     context.font = "10px Arial";
     const fs = context.fillStyle;
     context.fillStyle = "#404040";
-    const wt = wrapText(context, d.payload.name, 3);
+    const wt = wrapText(context, d.payload.name, 40);
     for (let i = 0; i < wt.length; i++) {
-      context.fillText(wt[i], d.x, d.y + radius * 2 + i * 12);
+      const yOffset = radius + i * 12 + 10;
+      context.fillText(wt[i], d.x, d.y + yOffset);
     }
     context.fillStyle = fs;
   }
@@ -280,8 +296,8 @@ onMounted(() => {
   if (!canvasElement.value) return;
   context = canvasElement.value.getContext("2d");
   if (!context) return;
-  context.imageSmoothingEnabled = true;
-  context.imageSmoothingQuality = "high";
+  context.lineWidth = 0.5
+  context.imageSmoothingEnabled = false;
   initGraph(dataset);
 });
 </script>
@@ -289,5 +305,6 @@ onMounted(() => {
 <style>
 canvas {
   border: 1px solid;
+  cursor: move;
 }
 </style>
