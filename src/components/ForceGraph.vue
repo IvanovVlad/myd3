@@ -19,6 +19,7 @@ import { graphIrbis, GraphState } from "../graphData";
 import { doubleClick } from "./draw";
 import { debounce, wrapText } from "./tools";
 import { getIcon, GraphIcons, isFounder, loadImages } from "./icons";
+import { loadNodes } from "./fetch";
 
 let icons: Record<GraphIcons, HTMLImageElement | undefined> = {
   employee: undefined,
@@ -38,19 +39,7 @@ const radius = 25,
   graphHeight = 500,
   graphWidth = 1000;
 
-const doubleClickHandler = doubleClick(async () => {
-  await fetch(
-    "https://irbis.dev.a-inform.com/ru/base/-/services/report/132999cd-a6fd-4538-a6a3-28f4891f937f/people-orgs.json?event=graph-node&inn=1832051249&ogrn=1061832016630"
-  ).then((e) => {
-    return e.json();
-  }).then((e) => {
-    const d = e.response as GraphState;
-    // simulation.stop();
-    // simulation.nodes(d.nodes).on("tick", () => simulationUpdate(d));
-    // simulation.force<any>("link").links(d.links);
-    // simulation.alphaTarget(0.5).restart();
-  });
-});
+const doubleClickHandler = doubleClick(async () => {});
 
 const simulation = d3
   .forceSimulation()
@@ -302,7 +291,14 @@ onBeforeMount(() => {
   loadImages(icons);
 });
 
-onMounted(() => {
+onMounted(async () => {
+  const { load } = loadNodes();
+
+  await load("1833036444").then((ds) => {
+    dataset = ds;
+    console.log(dataset)
+  });
+
   if (!canvasElement.value) return;
   context = canvasElement.value.getContext("2d");
   if (!context) return;
