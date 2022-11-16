@@ -280,9 +280,9 @@ function simulationUpdate(tempData: GraphState) {
   context.restore();
 }
 
-function initGraph(tempData: any) {
-  simulation.nodes(tempData.nodes).on("tick", () => simulationUpdate(dataset));
-  simulation.force<any>("link").links(tempData.links);
+function initGraph() {
+  simulation.nodes(dataset.nodes).on("tick", () => simulationUpdate(dataset));
+  simulation.force<any>("link").links(dataset.links);
 
   initDrag(dataset);
   initZoom();
@@ -296,9 +296,9 @@ onMounted(() => {
   if (!canvasElement.value) return;
   context = canvasElement.value.getContext("2d");
   if (!context) return;
-  context.lineWidth = 0.5
+  context.lineWidth = 0.5;
   context.imageSmoothingEnabled = false;
-  initGraph(dataset);
+  initGraph();
 });
 </script>
 
