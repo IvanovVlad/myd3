@@ -14,25 +14,42 @@
 <script lang="ts" setup>
 import * as d3 from "d3";
 import { D3DragEvent, D3ZoomEvent } from "d3";
-import { onBeforeMount, onMounted, Ref, ref } from "vue";
+import { onMounted, Ref, ref } from "vue";
 import { graphIrbis, GraphState } from "../graphData";
 import { doubleClick } from "./draw";
 import { debounce, wrapText } from "./tools";
-import { getIcon, GraphIcons, isFounder, loadImages } from "./icons";
+import { getIcon, GraphIcons, isFounder } from "./icons";
 import { loadNodes } from "./fetch";
+import employee from "../chart/icon_employee.svg";
+import employeeDisabled from "../chart/icon_employee_disabled.svg";
+import employeeEx from "../chart/icon_employee_ex.svg";
+import employeeExDisabled from "../chart/icon_employee_ex_disabled.svg";
+import founder from "../chart/icon_founder.svg";
+import founderDisabled from "../chart/icon_founder_disabled.svg";
+import founderEx from "../chart/icon_founder_ex.svg";
+import founderExDisabled from "../chart/icon_founder_ex_disabled.svg";
+import mainOrganisation from "../chart/icon_main_organization.svg";
+import organisation from "../chart/icon_organisation.svg";
+import organisationDead from "../chart/icon_organisation_dead.svg";
 
-let icons: Record<GraphIcons, HTMLImageElement | undefined> = {
-  employee: undefined,
-  employeeDisabled: undefined,
-  employeeEx: undefined,
-  employeeExDisabled: undefined,
-  founder: undefined,
-  founderDisabled: undefined,
-  founderEx: undefined,
-  founderExDisabled: undefined,
-  mainOrganisation: undefined,
-  organisation: undefined,
-  organisationDead: undefined,
+function createImg(s: string) {
+  const img = new Image();
+  img.src = s;
+  return img;
+}
+
+let icons: Record<GraphIcons, HTMLImageElement> = {
+  employee: (() => createImg(employee))(),
+  employeeDisabled: (() => createImg(employeeDisabled))(),
+  employeeEx: (() => createImg(employeeEx))(),
+  employeeExDisabled: (() => createImg(employeeExDisabled))(),
+  founder: (() => createImg(founder))(),
+  founderDisabled: (() => createImg(founderDisabled))(),
+  founderEx: (() => createImg(founderEx))(),
+  founderExDisabled: (() => createImg(founderExDisabled))(),
+  mainOrganisation: (() => createImg(mainOrganisation))(),
+  organisation: (() => createImg(organisation))(),
+  organisationDead: (() => createImg(organisationDead))(),
 };
 
 const radius = 25,
@@ -60,12 +77,13 @@ const simulation = d3
   .alphaTarget(0)
   .alphaDecay(0.05);
 
-let selectedNode: any = ref(null);
-let dragging = false;
-let canvasElement: Ref<HTMLCanvasElement | null> = ref(null);
-let context: CanvasRenderingContext2D | null = null;
-let transform = d3.zoomIdentity;
-let dataset: GraphState = graphIrbis;
+let selectedNode: any = ref(null),
+  dragging = false,
+  canvasElement: Ref<HTMLCanvasElement | null> = ref(null),
+  context: CanvasRenderingContext2D,
+  transform = d3.zoomIdentity,
+  dataset: GraphState = graphIrbis;
+
 const queryInn = dataset.nodes[0].payload.inn || "";
 
 function initDrag(tempData: any) {
@@ -287,20 +305,18 @@ function initGraph() {
   initZoom();
 }
 
-onBeforeMount(() => {
-  loadImages(icons);
-});
-
 onMounted(async () => {
   const { load } = loadNodes();
 
-  await load("1833036444").then((ds) => {
-    dataset = ds;
-    console.log(dataset)
-  });
+  dataset = graphIrbis;
+
+  // await load("1833036444").then((ds) => {
+  //   dataset = ds;
+  //   console.log(dataset)
+  // });
 
   if (!canvasElement.value) return;
-  context = canvasElement.value.getContext("2d");
+  context = canvasElement.value.getContext("2d") as CanvasRenderingContext2D;
   if (!context) return;
   context.lineWidth = 0.5;
   context.imageSmoothingEnabled = false;
