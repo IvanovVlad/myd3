@@ -8,14 +8,17 @@
       ></canvas>
     </div>
     <div>selected: {{ selectedNode }}</div>
+    <pre>
+      {{ JSON.stringify(dataset, undefined, 2) }}
+    </pre>
   </div>
 </template>
 
 <script lang="ts" setup>
 import * as d3 from "d3";
 import { D3DragEvent, D3ZoomEvent } from "d3";
-import { onMounted, Ref, ref } from "vue";
-import { graphIrbis, GraphState } from "../graphData";
+import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
+import { GraphNodeWrapper, GraphState } from "../graphData";
 import { doubleClick } from "./draw";
 import { debounce, wrapText } from "./tools";
 import { getIcon, GraphIcons, isFounder } from "./icons";
@@ -56,35 +59,48 @@ const radius = 25,
   graphHeight = 500,
   graphWidth = 1000;
 
-const doubleClickHandler = doubleClick(async () => {});
+const doubleClickHandler = doubleClick(async (n: GraphNodeWrapper) => {
+  if (n.payload.inn) {
+    let ogrn;
+    if (n.payload.type === "organisation") {
+      ogrn = n.payload.ogrn;
+    }
+    await load(dataset, n.payload?.inn, ogrn).then((ds) => {
+      dataset = ds;
+      initGraph();
+      simulation.alpha(0.75).restart();
+    });
+  }
+});
 
 const simulation = d3
   .forceSimulation()
   .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
-  .force("x", d3.forceX(graphWidth / 2).strength(0.1))
-  .force("y", d3.forceY(graphHeight / 2).strength(0.1))
+  // .force("x", d3.forceX(graphWidth / 2).strength(0.1))
+  // .force("y", d3.forceY(graphHeight / 2).strength(0.1))
   .force("charge", d3.forceManyBody().strength(-1000))
   .force(
     "link",
     d3
       .forceLink()
       .distance(100)
-      .strength(1)
+      .iterations(5)
       .id(function (d: any) {
         return d.payload.id;
       })
   )
-  .alphaTarget(0)
-  .alphaDecay(0.05);
+  .force("collide", d3.forceCollide(10));
 
-let selectedNode: any = ref(null),
+let selectedNode: Ref<GraphNodeWrapper | null> = ref(null),
   dragging = false,
   canvasElement: Ref<HTMLCanvasElement | null> = ref(null),
   context: CanvasRenderingContext2D,
   transform = d3.zoomIdentity,
-  dataset: GraphState = graphIrbis;
+  dataset: GraphState = { nodes: [], links: [] };
 
-const queryInn = dataset.nodes[0].payload.inn || "";
+const queryInn: ComputedRef<string> = computed(
+  () => dataset.nodes[0]?.payload?.inn || ""
+);
 
 function initDrag(tempData: any) {
   const dragHandler = d3
@@ -273,7 +289,7 @@ function simulationUpdate(tempData: GraphState) {
   for (const d of tempData.nodes) {
     if (!d.x || !d.y) continue;
     const size = radius * 2;
-    const icon = icons[getIcon(d.payload, queryInn)];
+    const icon = icons[getIcon(d.payload, queryInn.value)];
     if (icon) {
       context.drawImage(icon, d.x - size / 2, d.y - size / 2, size, size);
     }
@@ -298,22 +314,29 @@ function simulationUpdate(tempData: GraphState) {
 }
 
 function initGraph() {
-  simulation.nodes(dataset.nodes).on("tick", () => simulationUpdate(dataset));
+  simulation
+    .nodes(dataset.nodes)
+    .on("tick", () => simulationUpdate(dataset))
+    .on("end", () => {
+      dataset.nodes = dataset.nodes.map((n) => {
+        n.fx = n.x;
+        n.fy = n.y;
+        return n;
+      });
+    });
   simulation.force<any>("link").links(dataset.links);
 
   initDrag(dataset);
   initZoom();
 }
 
+const { load } = loadNodes();
+
 onMounted(async () => {
-  const { load } = loadNodes();
-
-  dataset = graphIrbis;
-
-  // await load("1833036444").then((ds) => {
-  //   dataset = ds;
-  //   console.log(dataset)
-  // });
+  // dataset = graphIrbis;
+  await load(dataset, "1832051249", "1061832016630").then((ds) => {
+    dataset = ds;
+  });
 
   if (!canvasElement.value) return;
   context = canvasElement.value.getContext("2d") as CanvasRenderingContext2D;

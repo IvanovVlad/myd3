@@ -6,24 +6,21 @@ export interface GraphResponse {
 }
 
 export function loadNodes() {
-  let dataset: GraphState = { nodes: [], links: [] };
-
-  async function load(inn: string, ogrn?: string) {
+  async function load(dataset: GraphState, inn: string, ogrn?: string) {
+    ogrn = ogrn ? "&ogrn=" + ogrn : "";
     return await fetch(
-      `https://irbis.dev.a-inform.com/ru/base/-/services/report/132999cd-a6fd-4538-a6a3-28f4891f937f/people-orgs.json?event=graph-node&inn=${inn}${
-        ogrn ? "&ogrn=" + ogrn : ""
-      }`
+      `https://ir-bis.org/ru/base/-/services/report/e89a86e4-ce4e-4ddd-9dc2-2c118c7fb98e/people-orgs.json?event=graph-node&inn=${inn}${ogrn}`
     )
       .then((e) => {
         return e.json();
       })
       .then((e) => {
         const d = e.response as GraphResponse;
-        return parseDataSet(d);
+        return parseDataSet(d, dataset);
       });
   }
 
-  function parseDataSet(d: GraphResponse): GraphState {
+  function parseDataSet(d: GraphResponse, dataset: GraphState): GraphState {
     const { nodes, links } = dataset;
 
     let newData = false;
@@ -46,12 +43,7 @@ export function loadNodes() {
     return { nodes, links };
   }
 
-  function getDataset() {
-    return dataset;
-  }
-
   return {
-    getDataset,
     load,
   };
 }
